@@ -1,0 +1,1 @@
+export const PHONE_NUMBER_VALIDATION = /^[6-9]\d{9}$/
