@@ -30,21 +30,6 @@ const ValidationSchema = yup.object().shape({
 
 const FormComponent = (props) => {
 
-	const [firebaseInit, setFirebaseInit] = useState(null);
-	
-  useEffect(() => {
-    let firebaseConfig = {
-      apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
-      authDomain: process.env.NEXT_PUBLIC_GOOGLE_AUTH_DOMAIN,
-      projectId: process.env.NEXT_PUBLIC_GOOGLE_PROJECT_ID,
-      storageBucket: process.env.NEXT_PUBLIC_GOOGLE_STORAGE_BUCKET,
-      appId: process.env.NEXT_PUBLIC_GOOGLE_APP_ID,
-      databaseURL: process.env.NEXT_PUBLIC_GOOGLE_FIREBASE_DATABASE_URL
-    }
-
-    setFirebaseInit(firebase.initializeApp(firebaseConfig));
-  }, []);
-
 	return(
 		<Grid container justify='center' >
 			<Grid item md={6} xs={12} sm={12} >
@@ -62,7 +47,7 @@ const FormComponent = (props) => {
 
 					onSubmit={async(values, {setSubmitting}) => {
 						console.log('form values -> ', values);
-						let database    = firebaseInit.database();
+						let database    = firebase.database();
 						let databaseRef = database.ref('data');
 
 						databaseRef.push(values);

@@ -35,7 +35,7 @@ const CustomButton = (props) => {
 		<Button
 			className={classes.submitButtonStyles}
 			size='large'
-			
+			type='submit'
 		>
 			{type}
 		</Button>
