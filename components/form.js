@@ -1,5 +1,6 @@
-import React, {useEffect, useState} from 'react'
-import {Grid, TextField} from '@material-ui/core';
+import React, {useState} from 'react'
+import {Grid, TextField, Slide} from '@material-ui/core';
+import {Alert} from '@material-ui/lab';
 import {Formik, Form} from 'formik';
 import * as yup from 'yup';
 import Button from 'components/button';
@@ -30,8 +31,22 @@ const ValidationSchema = yup.object().shape({
 
 const FormComponent = (props) => {
 
+	const {updateTabValue} = props;
+
+	const [submitted, setSubmitted] = useState(false);
+
 	return(
 		<Grid container justify='center' >
+			{
+				submitted &&
+				<Grid container justify='center' >
+					<Slide in={submitted} direction='left'  >
+						<Alert severity='success' color='success' style={{margin: '10px 0'}} >
+							Thankyou for your contribution
+						</Alert>
+					</Slide>
+				</Grid>
+			}
 			<Grid item md={6} xs={12} sm={12} >
 				<Formik
 					initialValues={{
@@ -46,17 +61,24 @@ const FormComponent = (props) => {
 					validationSchema={ValidationSchema}
 
 					onSubmit={async(values, {setSubmitting}) => {
-						console.log('form values -> ', values);
 						let database    = firebase.database();
 						let databaseRef = database.ref('data');
 
-						databaseRef.push(values);
+						databaseRef.push(values, function(err) {
+							if(err) {
+								console.log('error saving data');
+								setSubmitted(false);
+							}else {
+								console.log('data submitted successfully')
+								setSubmitted(true);
+								setTimeout(() => {updateTabValue()}, 3000);
+							}
+						});
 
 						setSubmitting(false);
 					}}
 				>
-					{({values, errors, touched, handleChange, setFieldValue}) => (
-						console.log('values -> ', values),
+					{({values, errors, touched, handleChange, setFieldValue, isSubmitting}) => (
 						<Form style={{padding: 8}} >
 							<Grid item md={12} xs={12} sm={12} style={{marginTop: 16}} >
 								<TextField 
@@ -156,7 +178,7 @@ const FormComponent = (props) => {
 							</Grid>
 
 							<Grid container justify='center' style={{marginTop: 16}} >								
-								<Button type="submit" />
+								<Button type="submit" disabled={isSubmitting} />
 							</Grid>
 						</Form>
 					)}

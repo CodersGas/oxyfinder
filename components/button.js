@@ -29,13 +29,14 @@ const useStyles = makeStyles(theme => ({
 const CustomButton = (props) => {
 	const classes = useStyles();
 
-	const {type} = props;
+	const {type, disabled} = props;
 
 	return(
 		<Button
 			className={classes.submitButtonStyles}
 			size='large'
 			type='submit'
+			disabled={disabled}
 		>
 			{type}
 		</Button>

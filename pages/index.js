@@ -69,6 +69,8 @@ const Home = () => {
 		setTabValue(newValue);
 	}
 
+	const updateTabValue = () => setTabValue(0);
+
   useEffect(() => {
     let firebaseConfig = {
       apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY,
@@ -126,7 +128,9 @@ const Home = () => {
 
 	      	{
 	      		tabValue == 1 &&
-	      		<FormComponent />
+	      		<FormComponent 
+	      			updateTabValue={updateTabValue} 
+	      		/>
 	      	}
 	      </Grid>
 	    </Grid>
