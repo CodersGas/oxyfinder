@@ -18,6 +18,10 @@ const useStyles = makeStyles(theme => ({
 	},
 	tabStyle: {
 		fontWeight: 500
+	},
+	svgStyle: {
+		position: 'fixed',
+		bottom: 0
 	}
 }))
 
@@ -97,7 +101,9 @@ const Home = () => {
 	    </Head>
 	    <Grid container >
 	      <Grid container >
+	        
 	        <Grid item md={4} xs={false} sm={false} className={classes.topLeftContainer} />
+	        
 	        <Grid item md={8} xs={12} sm={12} className={classes.topRightContainer} >
 	        	<Box height={1} justifyContent='center' display='flex' alignItems='center' >
 		        	<Typography variant='h1' >
@@ -105,6 +111,11 @@ const Home = () => {
 		        	</Typography>
 	        	</Box>
 	        </Grid>
+	        
+	        <svg className={classes.svgStyle} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+					  <path fill="#0099ff" fill-opacity="0.2" d="M0,96L80,128C160,160,320,224,480,250.7C640,277,800,267,960,245.3C1120,224,1280,192,1360,176L1440,160L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+					</svg>
+
 	      </Grid>
 
 	      <Grid container >
