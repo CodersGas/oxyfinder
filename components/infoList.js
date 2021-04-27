@@ -32,7 +32,7 @@ const InfoList = (props) => {
 	return(
 		<Grid container justify='center' >
 			<Grid item md={8} xs={12} sm={12} >
-				<TableContainer>
+				<TableContainer style={{padding: 8}} >
 					<Table>
 						<TableHead>
 							<TableRow>
@@ -47,7 +47,7 @@ const InfoList = (props) => {
 						</TableHead>
 
 						{
-							oxyData ?
+							oxyData &&
 							<TableBody>
 								{
 									Object.keys(oxyData).map((key) => (
@@ -78,16 +78,18 @@ const InfoList = (props) => {
 										</TableRow>
 									))
 								}
-							</TableBody>	
-							:
-							<Box mt={2} display='flex' justifyContent='center' >
-								<Alert severity='warning' color='warning' >
-									No Info Available
-								</Alert>
-							</Box>
-						}		
+							</TableBody>
+						}
 					</Table>
 				</TableContainer>
+				{
+					!oxyData &&
+					<Box width={1} mt={2} display='flex' justifyContent='center' >
+						<Alert severity='warning' color='warning' >
+							No Info Available
+						</Alert>
+					</Box>
+				}
 			</Grid>
 		</Grid>
 	)

@@ -4,6 +4,7 @@ import {makeStyles, withStyles} from '@material-ui/core/styles';
 import Head from 'next/head';
 import FormComponent from 'components/form';
 import InfoList from 'components/infoList';
+import {NextSeo} from 'next-seo';
 
 const useStyles = makeStyles(theme => ({
 	topLeftContainer: {
@@ -11,6 +12,9 @@ const useStyles = makeStyles(theme => ({
 	  backgroundRepeat: 'no-repeat',
 	  backgroundSize: 'contain',
 	  height: '400px',
+	},
+	topRightContainer: {
+		background: 'linear-gradient(to right, #2980B9 0%, #6DD5FA 90%)',
 	},
 	tabStyle: {
 		fontWeight: 500
@@ -80,6 +84,10 @@ const Home = () => {
 
   return (
   	<React.Fragment>
+  		<NextSeo 
+  			title='Oxy-Finder'
+  			description='Find or add Info about the availability of oxygen with you or nearby you'
+  		/>
 	  	<Head>
 		    <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
 	      <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-database.js"></script>
@@ -88,7 +96,7 @@ const Home = () => {
 	    <Grid container >
 	      <Grid container >
 	        <Grid item md={4} xs={false} sm={false} className={classes.topLeftContainer} />
-	        <Grid item md={8} xs={12} sm={12} >
+	        <Grid item md={8} xs={12} sm={12} className={classes.topRightContainer} >
 	        	<Box height={1} justifyContent='center' display='flex' alignItems='center' >
 		        	<Typography variant='h1' >
 		        		OXY-FINDER

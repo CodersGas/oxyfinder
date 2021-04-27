@@ -57,7 +57,7 @@ const FormComponent = (props) => {
 				>
 					{({values, errors, touched, handleChange, setFieldValue}) => (
 						console.log('values -> ', values),
-						<Form>
+						<Form style={{padding: 8}} >
 							<Grid item md={12} xs={12} sm={12} style={{marginTop: 16}} >
 								<TextField 
 									id="name"
