@@ -105,10 +105,17 @@ const Home = () => {
 	        <Grid item md={4} xs={false} sm={false} className={classes.topLeftContainer} />
 	        
 	        <Grid item md={8} xs={12} sm={12} className={classes.topRightContainer} >
-	        	<Box height={1} justifyContent='center' display='flex' alignItems='center' >
+	        	<Box height={1} justifyContent='center' display='flex' alignItems='center' flexDirection='column' >
 		        	<Typography variant='h1' >
 		        		OXY-FINDER
 		        	</Typography>
+
+		        	<Box mt={1} textAlign='center' p={2} >
+		        		<Typography variant='h6' style={{color: '#fff', fontWeight: 500}} >
+		        			Why let precious lives be lost, when we can save them. <br />Lets help people get the quick information about where they can find the oxygen cylinders or refillings
+		        			to save their precious ones. &#128591;
+		        		</Typography>
+		        	</Box>
 	        	</Box>
 	        </Grid>
 	        

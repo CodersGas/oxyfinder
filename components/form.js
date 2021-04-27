@@ -42,7 +42,7 @@ const FormComponent = (props) => {
 				<Grid container justify='center' >
 					<Slide in={submitted} direction='left'  >
 						<Alert severity='success' color='success' style={{margin: '10px 0'}} >
-							Thankyou for your contribution
+							Thankyou for your contribution &#128591;
 						</Alert>
 					</Slide>
 				</Grid>
