@@ -23,20 +23,34 @@ const useStyles = makeStyles(theme => ({
 	  	backgroundColor: '#00e676',
 	  	color: '#fff',
 	  }
+	},
+
+	googleButtonStyles: {
+		border: 'none',
+		boxShadow: '0 1px 7px 1px #e8e8e8'
 	}
 }))
 
 const CustomButton = (props) => {
 	const classes = useStyles();
 
-	const {type, disabled} = props;
+	const {type, disabled, handler} = props;
+
+	let buttonStyle = '';
+
+	if(type === 'submit') {
+		buttonStyle = classes.submitButtonStyles;
+	}else if(type === 'google login / signup') {
+		buttonStyle = classes.googleButtonStyles;
+	}
 
 	return(
 		<Button
-			className={classes.submitButtonStyles}
+			className={buttonStyle}
 			size='large'
 			type='submit'
 			disabled={disabled}
+			onClick={handler}
 		>
 			{type}
 		</Button>

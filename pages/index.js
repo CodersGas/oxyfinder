@@ -1,17 +1,20 @@
 import React, {useState, useEffect} from 'react';
-import {Grid, Typography, Tabs, Tab, Box} from '@material-ui/core';
+import {Grid, Typography, Tabs, Tab, Box, Fab} from '@material-ui/core';
 import {makeStyles, withStyles} from '@material-ui/core/styles';
 import Head from 'next/head';
 import FormComponent from 'components/form';
 import InfoList from 'components/infoList';
 import {NextSeo} from 'next-seo';
+import LoginSignup from 'components/loginSignup';
+import Cookie from 'js-cookie';
+import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew';
 
 const useStyles = makeStyles(theme => ({
 	topLeftContainer: {
 	  background: `url('https://image.freepik.com/free-vector/drawn-man-wearing-adjustable-face-mask_23-2148801317.jpg')`,
 	  backgroundRepeat: 'no-repeat',
 	  backgroundSize: 'contain',
-	  height: '400px',
+	  height: '200px',
 	},
 	topRightContainer: {
 		background: 'linear-gradient(to right, #2980B9 0%, #6DD5FA 90%)',
@@ -22,6 +25,11 @@ const useStyles = makeStyles(theme => ({
 	svgStyle: {
 		position: 'fixed',
 		bottom: 0
+	},
+	fabStyle: {
+		position: 'fixed',
+		bottom: 30,
+		right: 30
 	}
 }))
 
@@ -67,13 +75,16 @@ const AntTab = withStyles((theme) => ({
 const Home = () => {
 	const classes = useStyles();
 
-	const [tabValue, setTabValue] = useState(1);
+	const [tabValue, setTabValue]   = useState(1);
+	const [loggedIn, setIsLoggedIn] = useState(false);
 
-	const handleTabChange = (e, newValue) => {
-		setTabValue(newValue);
+	const handleTabChange = (e, newValue) => setTabValue(newValue);
+	const updateTabValue = (value) => setTabValue(value);
+	const updateLoginValue = (value) => setIsLoggedIn(value);
+	const handleLogout = () => {
+		window.location.reload();
+		Cookie.remove('user')
 	}
-
-	const updateTabValue = () => setTabValue(0);
 
   useEffect(() => {
     let firebaseConfig = {
@@ -86,6 +97,10 @@ const Home = () => {
     }
 
     firebase.initializeApp(firebaseConfig);
+
+    if(Cookie.get('user')) {
+    	updateLoginValue(true);
+    }
   }, []);
 
   return (
@@ -98,11 +113,12 @@ const Home = () => {
 		    <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
 	      <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-database.js"></script>
 	      <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-analytics.js"></script>
+	      <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-auth.js"></script>
 	    </Head>
 	    <Grid container >
 	      <Grid container >
 	        
-	        <Grid item md={4} xs={false} sm={false} className={classes.topLeftContainer} />
+	      	<Grid item md={4} xs={false} sm={false} className={classes.topLeftContainer} />
 	        
 	        <Grid item md={8} xs={12} sm={12} className={classes.topRightContainer} >
 	        	<Box height={1} justifyContent='center' display='flex' alignItems='center' flexDirection='column' >
@@ -111,7 +127,7 @@ const Home = () => {
 		        	</Typography>
 
 		        	<Box mt={1} textAlign='center' p={2} >
-		        		<Typography variant='h6' style={{color: '#fff', fontWeight: 500}} >
+		        		<Typography style={{color: '#fff', fontWeight: 500, fontSize: 16}} >
 		        			Why let precious lives be lost, when we can save them. <br />Lets help people get the quick information about where they can find the oxygen cylinders or refillings
 		        			to save their precious ones. &#128591;
 		        		</Typography>
@@ -120,12 +136,11 @@ const Home = () => {
 	        </Grid>
 	        
 	        <svg className={classes.svgStyle} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
-					  <path fill="#0099ff" fill-opacity="0.2" d="M0,96L80,128C160,160,320,224,480,250.7C640,277,800,267,960,245.3C1120,224,1280,192,1360,176L1440,160L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+					  <path fill="#0099ff" fillOpacity="0.2" d="M0,96L80,128C160,160,320,224,480,250.7C640,277,800,267,960,245.3C1120,224,1280,192,1360,176L1440,160L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
 					</svg>
-
 	      </Grid>
 
-	      <Grid container >
+      	<Grid container >
 	      	<Box width={1} display='flex' justifyContent='center' >
 	      		<AntTabs 
 	      			color='primary'
@@ -145,12 +160,27 @@ const Home = () => {
 	      	}
 
 	      	{
-	      		tabValue == 1 &&
+	      		tabValue == 1 && loggedIn &&
 	      		<FormComponent 
 	      			updateTabValue={updateTabValue} 
 	      		/>
 	      	}
+	      	
+	      	{
+	      		tabValue == 1 && !loggedIn &&
+	      		<LoginSignup 
+	      			updateLoginValue={updateLoginValue}
+	      		/>
+	      	}
+	      	
 	      </Grid>
+				{
+					loggedIn &&
+					<Fab onClick={handleLogout} color='secondary' variant='extended' className={classes.fabStyle} >
+						<PowerSettingsNewIcon />
+						Logout
+					</Fab>
+				}
 	    </Grid>
     </React.Fragment>
   )

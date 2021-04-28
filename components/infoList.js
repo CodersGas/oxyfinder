@@ -5,12 +5,11 @@ import {INFO_TABLE_HEADS} from 'utils/constants';
 
 const InfoList = (props) => {
 
-
 	const [oxyData, setOxyData] = useState(null);
  
 	function gotData(data){
     let infoData = data.val();
-    if(Object.keys(infoData).length > 0) {
+    if(infoData && Object.keys(infoData).length > 0) {
 			setOxyData(infoData);
 		}else {
 			setOxyData(null);

@@ -71,7 +71,7 @@ const FormComponent = (props) => {
 							}else {
 								console.log('data submitted successfully')
 								setSubmitted(true);
-								setTimeout(() => {updateTabValue()}, 3000);
+								setTimeout(() => {updateTabValue(0)}, 3000);
 							}
 						});
 
