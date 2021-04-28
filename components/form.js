@@ -5,10 +5,13 @@ import {Formik, Form} from 'formik';
 import * as yup from 'yup';
 import Button from 'components/button';
 import {PHONE_NUMBER_VALIDATION} from 'utils/constants';
+import moment from 'moment';
+import Cookie from 'js-cookie';
 
 const ValidationSchema = yup.object().shape({
 	name: yup
 				.string()
+				.matches(/^[a-zA-Z\s]+$/, 'Please enter valid name')
 				.min(4, 'Please enter valid name')
 				.required('This field is required'),
 	phoneNumber: yup
@@ -23,9 +26,11 @@ const ValidationSchema = yup.object().shape({
 					.min(10, 'Please Enter more details'),
 	city: yup
 				.string()
+				.matches(/^[a-zA-Z\s]+$/, 'Please enter valid city')
 				.required('This field is required'),
 	state: yup
 				.string()
+				.matches(/^[a-zA-Z\s]+$/, 'Please enter valid state')
 				.required('This field is required')
 });
 
@@ -63,6 +68,9 @@ const FormComponent = (props) => {
 					onSubmit={async(values, {setSubmitting}) => {
 						let database    = firebase.database();
 						let databaseRef = database.ref('data');
+
+						values.updatedAt = moment().format('lll');
+						values.userEmail = JSON.parse(Cookie.get('user')).user_email;
 
 						databaseRef.push(values, function(err) {
 							if(err) {

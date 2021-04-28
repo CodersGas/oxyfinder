@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {Grid, Paper, Typography, Box} from '@material-ui/core';
 import Button from 'components/button';
 import Cookie from 'js-cookie';
@@ -6,6 +6,8 @@ import Cookie from 'js-cookie';
 const LoginSignup = (props) => {
 
 	const {updateLoginValue} = props;
+
+	const [error, setError] = useState(false);
 
 	const handleLogin = () => {
 		let authProvider = new firebase.auth.GoogleAuthProvider();
@@ -26,12 +28,17 @@ const LoginSignup = (props) => {
 				updateLoginValue(true);
 
 			}).catch((err) => {
-				var errorCode = err.code;
-		    var errorMessage = err.message;
-		    var email = err.email;
-		    var credential = err.credential;
-			})
+		    setError(true);
+			});
 	}
+
+	useEffect(() => {
+
+		if(error) {
+			setTimeout(() => {setError(false)}, 3000);
+		}
+
+	}, [error]);
 
 	return(
 		<Grid container justify='center' >
@@ -47,6 +54,21 @@ const LoginSignup = (props) => {
 						type="google login / signup"
 						handler={handleLogin}
 					/>
+
+					<Box mt={2} >
+						<Typography style={{fontSize: 14, fontStyle: 'italic'}} >
+							Your email or any other information will not be used for any marketting purposes and only will be used to provide better user experience on site.
+						</Typography>
+					</Box>
+
+					{
+						error &&
+						<Box mt={3} >
+							<Typography>
+								Oops! Something went wrong. Please try again
+							</Typography>
+						</Box>
+					}
 				</Box>
 			</Grid>
 		</Grid>

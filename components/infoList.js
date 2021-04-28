@@ -30,7 +30,7 @@ const InfoList = (props) => {
 
 	return(
 		<Grid container justify='center' >
-			<Grid item md={8} xs={12} sm={12} >
+			<Grid item md={10} xs={12} sm={12} >
 				<TableContainer style={{padding: 8}} >
 					<Table>
 						<TableHead>
@@ -73,6 +73,10 @@ const InfoList = (props) => {
 
 											<TableCell>
 												{oxyData[key].state}
+											</TableCell>
+
+											<TableCell>
+												{oxyData[key].updatedAt}
 											</TableCell>
 										</TableRow>
 									))
