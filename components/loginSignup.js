@@ -28,6 +28,7 @@ const LoginSignup = (props) => {
 				updateLoginValue(true);
 
 			}).catch((err) => {
+				console.log('error while login ', err);
 		    setError(true);
 			});
 	}
