@@ -4,6 +4,7 @@ import {makeStyles, withStyles} from '@material-ui/core/styles';
 import Head from 'next/head';
 import FormComponent from 'components/form';
 import InfoList from 'components/infoList';
+import UserSubmittedList from 'components/userSubmittedList';
 import {NextSeo} from 'next-seo';
 import LoginSignup from 'components/loginSignup';
 import Cookie from 'js-cookie';
@@ -18,9 +19,6 @@ const useStyles = makeStyles(theme => ({
 	},
 	topRightContainer: {
 		background: 'linear-gradient(to right, #2980B9 0%, #6DD5FA 90%)',
-	},
-	tabStyle: {
-		fontWeight: 500
 	},
 	svgStyle: {
 		position: 'fixed',
@@ -75,16 +73,41 @@ const AntTab = withStyles((theme) => ({
 const Home = () => {
 	const classes = useStyles();
 
+	/* states declarations start */
+	
 	const [tabValue, setTabValue]   = useState(1);
 	const [loggedIn, setIsLoggedIn] = useState(false);
+	const [editData, setEditData]   = useState({choice: false, editId: null});
+	
+	/* states declarations end */
 
-	const handleTabChange = (e, newValue) => setTabValue(newValue);
-	const updateTabValue = (value) => setTabValue(value);
+
+	/* Handlers start */
+
+	const handleTabChange = (e, newValue) => {
+		setTabValue(newValue);
+		setEditData({choice: false, editId: null});
+	}
+	
+	const updateTabValue = (value) => {
+		setTabValue(value);
+		setEditData({choice: false, editId: null});
+	}
+	
 	const updateLoginValue = (value) => setIsLoggedIn(value);
+	
 	const handleLogout = () => {
 		window.location.reload();
 		Cookie.remove('user')
 	}
+
+	const updateEditDataState = (editId) => {
+		setEditData({choice: true, editId: editId});
+		setTabValue(1);
+	}
+
+	/* Handlers end */
+
 
   useEffect(() => {
     let firebaseConfig = {
@@ -147,8 +170,12 @@ const Home = () => {
 	      			value={tabValue}
 	      			onChange={handleTabChange}
 	      		>
-	      			<AntTab className={classes.tabStyle} label="I need Information" />
+	      			<AntTab label="I need Information" />
 	      			<AntTab label="I Have Information" />
+	      			{
+	      				loggedIn &&
+	      				<AntTab label="My Submitted Information" />
+	      			}
 	      		</AntTabs>
 	      	</Box>
 	      </Grid>
@@ -163,6 +190,7 @@ const Home = () => {
 	      		tabValue == 1 && loggedIn &&
 	      		<FormComponent 
 	      			updateTabValue={updateTabValue} 
+	      			editData={editData}
 	      		/>
 	      	}
 	      	
@@ -171,6 +199,11 @@ const Home = () => {
 	      		<LoginSignup 
 	      			updateLoginValue={updateLoginValue}
 	      		/>
+	      	}
+
+	      	{
+	      		tabValue == 2 &&
+	      		<UserSubmittedList updateEditDataState={updateEditDataState} />
 	      	}
 	      	
 	      </Grid>

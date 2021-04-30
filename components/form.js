@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Grid, TextField, Slide} from '@material-ui/core';
 import {Alert} from '@material-ui/lab';
 import {Formik, Form} from 'formik';
@@ -36,9 +36,28 @@ const ValidationSchema = yup.object().shape({
 
 const FormComponent = (props) => {
 
-	const {updateTabValue} = props;
+	const {updateTabValue, editData} = props;
 
 	const [submitted, setSubmitted] = useState(false);
+	const [oxyData, setOxyData] = useState(null);
+
+	function gotData(data){
+    let infoData = data.val();
+    setOxyData(infoData[editData.editId]);
+	}
+
+	function errData(err){
+    console.log('Error!');
+    console.log(err)
+	}
+
+	useEffect(() => {
+		if(editData.choice) {
+			let database = firebase.database();
+			let ref      = database.ref('data').orderByKey().equalTo(editData.editId); 
+			ref.on('value', gotData, errData);
+		}
+	}, [editData]);	
 
 	return(
 		<Grid container justify='center' >
@@ -55,15 +74,17 @@ const FormComponent = (props) => {
 			<Grid item md={6} xs={12} sm={12} >
 				<Formik
 					initialValues={{
-						name: "",
-						phoneNumber: "",
-						alternatePhoneNumber: "",
-						address: "",
-						city: "",
-						state: ""
+						name: oxyData ? oxyData.name : "",
+						phoneNumber: oxyData ? oxyData.phoneNumber : "",
+						alternatePhoneNumber: oxyData ? oxyData.alternatePhoneNumber : "",
+						address: oxyData ? oxyData.address : "",
+						city: oxyData ? oxyData.city : "",
+						state: oxyData ? oxyData.state :  ""
 					}}
 
 					validationSchema={ValidationSchema}
+					
+					enableReinitialize={true}
 
 					onSubmit={async(values, {setSubmitting}) => {
 						let database    = firebase.database();
@@ -72,16 +93,28 @@ const FormComponent = (props) => {
 						values.updatedAt = moment().format('lll');
 						values.userEmail = JSON.parse(Cookie.get('user')).user_email;
 
-						databaseRef.push(values, function(err) {
-							if(err) {
-								console.log('error saving data');
-								setSubmitted(false);
-							}else {
-								console.log('data submitted successfully')
-								setSubmitted(true);
-								setTimeout(() => {updateTabValue(0)}, 3000);
-							}
-						});
+						if(!editData.choice) {
+							databaseRef.push(values, function(err) {
+								if(err) {
+									console.log('error saving data');
+									setSubmitted(false);
+								}else {
+									console.log('data submitted successfully')
+									setSubmitted(true);
+									setTimeout(() => {updateTabValue(0)}, 3000);
+								}
+							});
+						}else {
+							let editId = editData.editId;
+							
+							let updateData = {};
+							updateData[editId] = values
+							
+							databaseRef.update(updateData);
+							
+							setSubmitted(true);
+							setTimeout(() => {updateTabValue(0)}, 3000);
+						}
 
 						setSubmitting(false);
 					}}
